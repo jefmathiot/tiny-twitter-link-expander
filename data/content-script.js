@@ -1,4 +1,4 @@
-var linkClassName = "twitter-timeline-link"
+var linkClassNames = ["twitter-timeline-link", "url-ext"]
 
 function expandCurrentTwitterLinks(){
   var links = document.getElementsByClassName(linkClassName)
@@ -12,9 +12,11 @@ function expandAddedTwitterLinks(){
     mutations.forEach(function(mutation){
       var addedNodes = mutation.addedNodes
       for(var i = 0; i < addedNodes.length; i++){
-        var links = addedNodes[i].querySelectorAll("." + linkClassName)
-        for(var j = 0; j < links.length; j++){
-          expandTwitterLink(links[j])
+        for(var j = 0; j < linkClassNames.length; j++){
+          var links = addedNodes[i].querySelectorAll("." + linkClassNames[j])
+          for(var k = 0; k < links.length; k++){
+            expandTwitterLink(links[k])
+          }
         }
       }
     })
@@ -27,7 +29,8 @@ function expandAddedTwitterLinks(){
 
 function expandTwitterLink(linkElem){
   if(linkElem.getAttribute("href")){
-    var originalLink = linkElem.getAttribute("data-expanded-url")
+    var originalLink = linkElem.getAttribute("data-expanded-url") ||
+      linkElem.getAttribute("data-full-url");
     if(originalLink){
       linkElem.setAttribute("href", originalLink)
     }
